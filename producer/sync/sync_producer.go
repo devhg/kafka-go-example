@@ -49,6 +49,6 @@ func Producer(topic string, limit int) {
 			log.Println("SendMessage err: ", err)
 			return
 		}
-		log.Printf("[Producer] partitionid: %d; offset:%d, value: %s\n", partition, offset, str)
+		log.Printf("[Producer] partitionID: %d; offset:%d, value: %s\n", partition, offset, str)
 	}
 }

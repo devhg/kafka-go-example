@@ -13,8 +13,8 @@ import (
 	本例中只包含了消息的消费逻辑，没有ACK相关逻辑，即所有消息都可以重复消费。
 
 	注:kafka 中使用的是 offset 机制，每条消息都有一个 offset(类似于消息ID)，每个消费者会维护自己的消费 offset，
-	kafka 中通过消费者 offset 和消息 offset 来区分哪些消息已消费，哪些没有。没有使用其他MQ的ACK机制。
-	其他MQ中消息ACK后就会被删除，kafka 则不会，kafka 消息过期后才会删除，且过期时间可以自定义，
+	kafka 中通过消费者 offset 和消息 offset 来区分哪些消息已消费，哪些没有。
+	没有使用其他MQ的ACK机制。其他MQ中消息ACK后就会被删除，kafka 则不会，kafka 消息过期后才会删除，且过期时间可以自定义，
 	即就算消费者A把所有消息都消费了，也可以重置自己的 offset 然后再从头开始消费。
 	所以甚至可以将 kafka 用于存储消息。
 	名词: standalone consumer、topic、partition、offset
@@ -34,7 +34,7 @@ func SinglePartition(topic string) {
 	// 参数3 offset 从哪儿开始消费起走，正常情况下每次消费完都会将这次的offset提交到kafka，然后下次可以接着消费，
 	// 这里 sarama.OffsetNewest 就从最新的开始消费，即该 consumer 启动之前产生的消息都无法被消费
 	// 如果改为 sarama.OffsetOldest 则会从最旧的消息开始消费，即每次重启 consumer 都会把该 topic 下的所有消息消费一次
-	partitionConsumer, err := consumer.ConsumePartition(topic, 0, sarama.OffsetNewest)
+	partitionConsumer, err := consumer.ConsumePartition(topic, 0, sarama.OffsetOldest)
 	if err != nil {
 		log.Fatal("ConsumePartition err: ", err)
 	}
